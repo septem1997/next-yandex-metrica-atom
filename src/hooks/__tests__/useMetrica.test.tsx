@@ -1,7 +1,8 @@
 import { renderHook } from '@testing-library/react';
+import { createStore, Provider } from 'jotai';
 import React, { FC, ReactNode } from 'react';
 
-import { MetricaTagIDContext } from '../../components/YandexMetricaProvider';
+import { metricaTagIDAtom } from '../../lib/atom';
 import { useMetrica } from '../useMetrica';
 
 const YM_MOCK = jest.fn();
@@ -10,8 +11,11 @@ Object.defineProperty(window, 'ym', {
   writable: true,
 });
 
+const store = createStore();
+store.set(metricaTagIDAtom, 444);
+
 const Providers: FC<{ children: ReactNode }> = ({ children }) => {
-  return <MetricaTagIDContext.Provider value={444}>{children}</MetricaTagIDContext.Provider>;
+  return <Provider store={store}>{children}</Provider>;
 };
 
 describe('useMetrica', () => {

@@ -1,13 +1,14 @@
-import { useCallback, useContext } from 'react';
+import { useAtomValue } from 'jotai';
+import { useCallback } from 'react';
 
-import { MetricaTagIDContext } from '../components/YandexMetricaProvider';
+import { metricaTagIDAtom } from '../lib/atom';
 import { type EventParameters } from '../lib/types/events';
 import { type NotBounceOptions } from '../lib/types/options';
 import { type UserParameters, type VisitParameters } from '../lib/types/parameters';
 import { ym } from '../lib/ym';
 
 export const useMetrica = () => {
-  const tagID = useContext(MetricaTagIDContext);
+  const tagID = useAtomValue(metricaTagIDAtom);
 
   const notBounce = useCallback(
     (options?: NotBounceOptions) => {

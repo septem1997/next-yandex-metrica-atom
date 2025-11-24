@@ -1,14 +1,13 @@
 {
-  "name": "next-yandex-metrica",
-  "version": "1.2.3",
-  "description": "Yandex Metrica integration for Next.js",
+  "name": "next-yandex-metrica-atom",
+  "version": "1.0.0",
+  "description": "Yandex Metrica integration for Next.js (Atom-based, no context nesting required)",
   "files": [
     "dist"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/v-doronin/next-yandex-metrica",
-  "author": "Vladislav Doronin <reapziq@gmail.com>",
+  "author": "Septemb1997 <we.septem1997@gmail.com>",
   "license": "MIT",
   "keywords": [
     "next",
@@ -16,7 +15,9 @@
     "yandex",
     "metrica",
     "metrika",
-    "analytics"
+    "analytics",
+    "jotai",
+    "atom"
   ],
   "scripts": {
     "build": "del-cli dist && tsc",
@@ -27,6 +28,9 @@
     "test:ci": "jest --ci --coverage",
     "format": "prettier --write --log-level silent .",
     "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "jotai": "^2.15.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.5",

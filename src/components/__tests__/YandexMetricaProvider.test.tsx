@@ -23,11 +23,7 @@ const METRICA_SCRIPT_ALTERNATIVE_CDN =
 
 describe('YandexMetricaProvider', () => {
   it('renders', () => {
-    render(
-      <YandexMetricaProvider tagID={444} router="pages">
-        <div />
-      </YandexMetricaProvider>,
-    );
+    render(<YandexMetricaProvider tagID={444} router="pages" />);
 
     expect(useTrackRouteChange).toHaveBeenCalledWith({ tagID: 444, router: 'pages' });
 
@@ -43,9 +39,7 @@ describe('YandexMetricaProvider', () => {
         tagID={444}
         initParameters={{ accurateTrackBounce: false, clickmap: false }}
         router="pages"
-      >
-        <div />
-      </YandexMetricaProvider>,
+      />,
     );
 
     expect(document.getElementById('yandex-metrica')).toHaveTextContent(
@@ -54,11 +48,7 @@ describe('YandexMetricaProvider', () => {
   });
 
   it('renders with an alternative CDN url', () => {
-    render(
-      <YandexMetricaProvider tagID={444} router="pages" shouldUseAlternativeCDN>
-        <div />
-      </YandexMetricaProvider>,
-    );
+    render(<YandexMetricaProvider tagID={444} router="pages" shouldUseAlternativeCDN />);
 
     expect(useTrackRouteChange).toHaveBeenCalledWith({ tagID: 444, router: 'pages' });
 
@@ -68,15 +58,11 @@ describe('YandexMetricaProvider', () => {
     expect(document.getElementById('yandex-metrica-pixel')).toBeInTheDocument();
   });
 
-  it('renders children when tagID is not defined', () => {
+  it('renders nothing when tagID is not defined', () => {
     const spyOnWarn = jest.spyOn(console, 'warn').mockImplementation();
-    render(
-      <YandexMetricaProvider router="pages">
-        <div id="content" />
-      </YandexMetricaProvider>,
-    );
+    const { container } = render(<YandexMetricaProvider router="pages" />);
 
-    expect(document.getElementById('content')).toBeInTheDocument();
+    expect(container).toBeEmptyDOMElement();
     expect(document.getElementById('yandex-metrica')).not.toBeInTheDocument();
     expect(spyOnWarn).toHaveBeenCalledWith(
       '[next-yandex-metrica] Yandex.Metrica tag ID is not defined',
@@ -85,11 +71,7 @@ describe('YandexMetricaProvider', () => {
 
   it('gets tagID from NEXT_PUBLIC_YANDEX_METRICA_ID', () => {
     process.env.NEXT_PUBLIC_YANDEX_METRICA_ID = '444';
-    render(
-      <YandexMetricaProvider router="pages">
-        <div />
-      </YandexMetricaProvider>,
-    );
+    render(<YandexMetricaProvider router="pages" />);
 
     expect(document.getElementById('yandex-metrica')).toHaveTextContent(
       `${METRICA_SCRIPT} ym(444, "init", {});`,
@@ -97,11 +79,7 @@ describe('YandexMetricaProvider', () => {
   });
 
   it('renders tracking pixel', () => {
-    render(
-      <YandexMetricaProvider tagID={444} router="pages">
-        <div />
-      </YandexMetricaProvider>,
-    );
+    render(<YandexMetricaProvider tagID={444} router="pages" />);
 
     const pixelElement = document.getElementById('yandex-metrica-pixel');
     expect(pixelElement).toBeInTheDocument();

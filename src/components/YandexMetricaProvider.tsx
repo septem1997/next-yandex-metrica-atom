@@ -1,16 +1,15 @@
 'use client';
 
+import { useSetAtom } from 'jotai';
 import Script, { ScriptProps } from 'next/script';
-import React, { createContext, FC, ReactNode, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 
 import { useTrackRouteChange } from '../hooks/useTrackRouteChange';
+import { metricaTagIDAtom } from '../lib/atom';
 import { InitParameters } from '../lib/types/parameters';
 import { NextRouter } from '../lib/types/router';
 
-export const MetricaTagIDContext = createContext<number | null>(null);
-
 interface Props {
-  children: ReactNode;
   tagID?: number;
   strategy?: ScriptProps['strategy'];
   initParameters?: InitParameters;
@@ -19,24 +18,28 @@ interface Props {
 }
 
 export const YandexMetricaProvider: FC<Props> = ({
-  children,
   tagID,
   strategy = 'afterInteractive',
   initParameters,
   shouldUseAlternativeCDN = false,
   router,
 }) => {
+  const setTagID = useSetAtom(metricaTagIDAtom);
   const YANDEX_METRICA_ID = process.env.NEXT_PUBLIC_YANDEX_METRICA_ID;
   const id = useMemo(() => {
     return tagID || (YANDEX_METRICA_ID ? Number(YANDEX_METRICA_ID) : null);
   }, [YANDEX_METRICA_ID, tagID]);
+
+  useEffect(() => {
+    setTagID(id);
+  }, [id, setTagID]);
 
   useTrackRouteChange({ tagID: id, router });
 
   if (!id) {
     console.warn('[next-yandex-metrica] Yandex.Metrica tag ID is not defined');
 
-    return <>{children}</>;
+    return null;
   }
 
   const scriptSrc = shouldUseAlternativeCDN
@@ -64,7 +67,6 @@ export const YandexMetricaProvider: FC<Props> = ({
           __html: `<div><img src="https://mc.yandex.ru/watch/${id}" style="position:absolute; left:-9999px;" alt="" /></div>`,
         }}
       />
-      <MetricaTagIDContext.Provider value={id}>{children}</MetricaTagIDContext.Provider>
     </>
   );
 };
