@@ -9,6 +9,26 @@ Yandex Metrica integration for Next.js, refactored to use [Jotai](https://github
 - **No Nesting Required**: The Provider component doesn't need to wrap your application. Just place it in your root layout.
 - **Global Access**: Access Metrica methods from anywhere using the hook.
 - **Lightweight**: Powered by Jotai atoms.
+- **Cache Component Compatible**: Works seamlessly with Next.js cache components, unlike traditional Context-based solutions.
+
+## Why Jotai?
+
+This package is a fork of [next-yandex-metrica](https://github.com/v-doronin/next-yandex-metrica) refactored to use [Jotai](https://github.com/pmndrs/jotai) atoms instead of React Context.
+
+The main reason for this change is **Next.js cache component compatibility**. When you enable cache components in Next.js, you cannot use `usePathname` or other router hooks directly within cached components. Traditional Context-based solutions require nesting the provider inside the component tree, which conflicts with cache components.
+
+With Jotai atoms, the provider doesn't need to wrap the component tree - it can be placed anywhere in your root layout, and the atoms provide global state access without Context nesting. This makes it compatible with Next.js cache components while maintaining the same API.
+
+```tsx
+// ✅ Works with cache components
+<Suspense>
+  <YandexMetricaProvider
+    tagID={12345678}
+    initParameters={{ clickmap: true, trackLinks: true, accurateTrackBounce: true }}
+    router="app"
+  />
+</Suspense>
+```
 
 ## Installation
 
@@ -33,32 +53,14 @@ import { YandexMetricaProvider } from 'next-yandex-metrica-atom';
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+    <Suspense>
       <YandexMetricaProvider
         tagID={12345678}
         initParameters={{ clickmap: true, trackLinks: true, accurateTrackBounce: true }}
         router="app"
       />
+        </Suspense>
       {children}
-    </>
-  );
-}
-```
-
-#### Pages router
-
-```tsx
-// pages/_app.tsx
-import { YandexMetricaProvider } from 'next-yandex-metrica-atom';
-
-export default function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <>
-      <YandexMetricaProvider
-        tagID={12345678}
-        initParameters={{ clickmap: true, trackLinks: true, accurateTrackBounce: true }}
-        router="pages"
-      />
-      <Component {...pageProps} />
     </>
   );
 }

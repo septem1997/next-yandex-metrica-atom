@@ -7,7 +7,11 @@
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "author": "Septemb1997 <we.septem1997@gmail.com>",
+  "author": "septem1997 <750627595@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/septem1997/next-yandex-metrica-atom"
+  },
   "license": "MIT",
   "keywords": [
     "next",
