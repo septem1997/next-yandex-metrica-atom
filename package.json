@@ -1,6 +1,6 @@
 {
   "name": "next-yandex-metrica-atom",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Yandex Metrica integration for Next.js (Atom-based, no context nesting required)",
   "files": [
     "dist"
